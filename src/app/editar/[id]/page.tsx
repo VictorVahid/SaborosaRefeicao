@@ -1,26 +1,20 @@
 'use client'
-
 import { useEffect, useState } from 'react';
 import { supabase } from '@/src/lib/supabase';
-import { useRouter, useParams } from 'next/navigation'; // Next.js hooks
+import { useRouter, useParams } from 'next/navigation'; 
 import { ChevronLeft } from 'lucide-react';
 import { Button } from '@/src/components/ui/button';
-
 export default function EditarItem() {
   const router = useRouter();
-  const params = useParams(); // Pega o [id] da URL
-  
+  const params = useParams(); 
   const [nome, setNome] = useState('');
   const [quantidade, setQuantidade] = useState('');
   const [unidade, setUnidade] = useState('');
   const [minimo, setMinimo] = useState('');
   const [loading, setLoading] = useState(false);
   const [fetching, setFetching] = useState(true);
-
-  // Carregar os dados atuais do item
   useEffect(() => {
     if (!params.id) return;
-    
     (async () => {
       const { data, error } = await supabase
         .from('itens_estoque')
@@ -38,16 +32,13 @@ export default function EditarItem() {
         setUnidade(data.unidade_medida);
         setMinimo(String(data.estoque_minimo));
       }
-      
       setFetching(false);
     })();
   }, [params.id]);
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!nome.trim() || !params.id) return;
     setLoading(true);
-
     const { error } = await supabase
       .from('itens_estoque')
       .update({
@@ -57,20 +48,16 @@ export default function EditarItem() {
         estoque_minimo: Number(minimo) || 0,
       })
       .eq('id', params.id);
-
     setLoading(false);
     if (!error) router.push('/');
   };
-
   if (fetching) return (
     <div className="flex items-center justify-center min-h-screen bg-background">
       <p className="text-muted-foreground animate-pulse">Buscando dados do item...</p>
     </div>
   );
-
   return (
     <main className="max-w-md mx-auto min-h-screen bg-background antialiased">
-      {/* Header Estilo iOS */}
       <header className="px-6 pt-12 pb-6 sticky top-0 bg-background/80 backdrop-blur-md z-40 border-b border-transparent">
         <button 
           onClick={() => router.push('/')} 
@@ -81,9 +68,7 @@ export default function EditarItem() {
         <h1 className="text-3xl font-extrabold text-foreground tracking-tight">Editar Item</h1>
         <p className="text-muted-foreground text-xs">Alterando: {nome}</p>
       </header>
-
       <form onSubmit={handleSubmit} className="px-6 space-y-6">
-        {/* Campo Nome */}
         <div className="space-y-2">
           <label className="text-[11px] font-bold uppercase tracking-widest text-muted-foreground ml-1">
             Nome do item
@@ -97,8 +82,6 @@ export default function EditarItem() {
             className="w-full h-14 px-4 rounded-2xl bg-card border border-border focus:ring-2 focus:ring-primary outline-none text-foreground transition-all" 
           />
         </div>
-
-        {/* Quantidade e Unidade */}
         <div className="grid grid-cols-2 gap-4">
           <div className="space-y-2">
             <label className="text-[11px] font-bold uppercase tracking-widest text-muted-foreground ml-1">
@@ -128,8 +111,6 @@ export default function EditarItem() {
             />
           </div>
         </div>
-
-        {/* Estoque Mínimo */}
         <div className="space-y-2">
           <label className="text-[11px] font-bold uppercase tracking-widest text-muted-foreground ml-1">
             Estoque Mínimo (Alerta)
@@ -144,8 +125,6 @@ export default function EditarItem() {
             className="w-full h-14 px-4 rounded-2xl bg-card border border-border focus:ring-2 focus:ring-primary outline-none text-foreground transition-all" 
           />
         </div>
-
-        {/* Botão Salvar Estilo Cupertino */}
         <Button 
           variant="cupertino" 
           size="stepper" 

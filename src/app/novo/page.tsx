@@ -1,38 +1,31 @@
 'use client'
-
 import { useState } from 'react';
 import { supabase } from '@/src/lib/supabase';
-import { useRouter } from 'next/navigation'; // Ajustado para Next.js
+import { useRouter } from 'next/navigation'; 
 import { ChevronLeft } from 'lucide-react';
 import { Button } from '@/src/components/ui/button';
-
 export default function NovoItem() {
-  const router = useRouter(); // Hook correto do Next.js
+  const router = useRouter(); 
   const [nome, setNome] = useState('');
   const [quantidade, setQuantidade] = useState('');
   const [unidade, setUnidade] = useState('');
   const [minimo, setMinimo] = useState('');
   const [loading, setLoading] = useState(false);
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!nome.trim()) return;
     setLoading(true);
-
     const { error } = await supabase.from('itens_estoque').insert({
       nome: nome.trim(),
       quantidade_atual: Number(quantidade) || 0,
       unidade_medida: unidade.trim() || 'un',
       estoque_minimo: Number(minimo) || 0,
     });
-
     setLoading(false);
-    if (!error) router.push('/'); // Navegação correta
+    if (!error) router.push('/'); 
   };
-
   return (
     <main className="max-w-md mx-auto min-h-screen bg-background antialiased">
-      {/* Header Estilo iOS */}
       <header className="px-6 pt-12 pb-6 sticky top-0 bg-background/80 backdrop-blur-md z-40">
         <button 
           onClick={() => router.push('/')} 
@@ -42,9 +35,7 @@ export default function NovoItem() {
         </button>
         <h1 className="text-3xl font-extrabold text-foreground tracking-tight">Novo Item</h1>
       </header>
-
       <form onSubmit={handleSubmit} className="px-6 space-y-6">
-        {/* Campo Nome */}
         <div className="space-y-2">
           <label className="text-[11px] font-bold uppercase tracking-widest text-muted-foreground ml-1">
             Nome do item
@@ -58,8 +49,6 @@ export default function NovoItem() {
             className="w-full h-14 px-4 rounded-2xl bg-card border border-border focus:ring-2 focus:ring-primary outline-none text-foreground transition-all" 
           />
         </div>
-
-        {/* Quantidade e Unidade */}
         <div className="grid grid-cols-2 gap-4">
           <div className="space-y-2">
             <label className="text-[11px] font-bold uppercase tracking-widest text-muted-foreground ml-1">
@@ -89,8 +78,6 @@ export default function NovoItem() {
             />
           </div>
         </div>
-
-        {/* Estoque Mínimo */}
         <div className="space-y-2">
           <label className="text-[11px] font-bold uppercase tracking-widest text-muted-foreground ml-1">
             Estoque Mínimo (Alerta)
@@ -105,8 +92,6 @@ export default function NovoItem() {
             className="w-full h-14 px-4 rounded-2xl bg-card border border-border focus:ring-2 focus:ring-primary outline-none text-foreground transition-all" 
           />
         </div>
-
-        {/* Botão Salvar Estilo Cupertino */}
         <Button 
           variant="cupertino" 
           size="stepper" 

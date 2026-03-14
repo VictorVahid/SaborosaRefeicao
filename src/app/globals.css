@@ -1,41 +1,30 @@
 @import "tailwindcss";
-
 @custom-variant dark (&:where(.dark, .dark *));
-
 @theme {
   /* Apple Cupertino palette */
   --color-background: hsl(240 6% 97%); /* #F2F2F7 */
   --color-foreground: hsl(0 0% 0%);
-
   --color-card: hsl(0 0% 100%);
   --color-card-foreground: hsl(0 0% 0%);
-
   --color-primary: hsl(211 100% 50%); /* #007AFF */
   --color-primary-foreground: hsl(0 0% 100%);
-
   --color-secondary: hsl(240 6% 97%);
   --color-secondary-foreground: hsl(0 0% 0%);
-
   --color-muted: hsl(240 5% 93%);
   --color-muted-foreground: hsl(240 2% 56%);
-
   --color-destructive: hsl(0 100% 59%); /* #FF3B30 */
   --color-destructive-foreground: hsl(0 0% 100%);
-
   --color-border: hsl(240 6% 90%);
   --color-input: hsl(240 6% 90%);
   --color-ring: hsl(211 100% 50%);
-
   --radius-lg: 1.5rem;
   --radius-md: calc(1.5rem - 2px);
   --radius-sm: calc(1.5rem - 4px);
 }
-
 @layer base {
   * {
     @apply border-border;
   }
-
   body {
     @apply bg-background text-foreground antialiased;
     font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', sans-serif;

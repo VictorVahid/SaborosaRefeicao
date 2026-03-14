@@ -1,11 +1,9 @@
 'use client'
-
 import { useEffect, useState } from 'react';
 import { supabase } from '../lib/supabase';
-import { useRouter } from 'next/navigation'; // Ajustado para Next.js
+import { useRouter } from 'next/navigation'; 
 import { Trash2, Pencil, AlertTriangle, Plus } from 'lucide-react';
 import { Button } from '../components/ui/button';
-
 interface ItemEstoque {
   id: string;
   nome: string;
@@ -13,12 +11,10 @@ interface ItemEstoque {
   unidade_medida: string;
   estoque_minimo: number;
 }
-
 export default function Home() {
   const [itens, setItens] = useState<ItemEstoque[]>([]);
   const [mounted, setMounted] = useState(false);
-  const router = useRouter(); // Hook correto do Next.js
-
+  const router = useRouter(); 
   useEffect(() => {
     const timer = setTimeout(() => setMounted(true), 0);
     (async () => {
@@ -28,7 +24,6 @@ export default function Home() {
     })();
     return () => clearTimeout(timer);
   }, []);
-
   const alterarQuantidade = async (id: string, novaQuantidade: number) => {
     if (novaQuantidade < 0) return;
     const { error } = await supabase.from('itens_estoque').update({ quantidade_atual: novaQuantidade }).eq('id', id);
@@ -36,25 +31,20 @@ export default function Home() {
       setItens(prev => prev.map(item => item.id === id ? { ...item, quantidade_atual: novaQuantidade } : item));
     }
   };
-
   const deletarItem = async (id: string, nome: string) => {
     if (!confirm(`Apagar "${nome}"?`)) return;
     const { error } = await supabase.from('itens_estoque').delete().eq('id', id);
     if (!error) setItens(prev => prev.filter(item => item.id !== id));
   };
-
   if (!mounted) return null;
-
   return (
     <main className="max-w-md mx-auto min-h-screen bg-background pb-32 antialiased">
-      {/* Header Estilo iOS com Blur */}
       <header className="px-6 pt-12 pb-6 sticky top-0 bg-background/80 backdrop-blur-md z-40 border-b border-transparent">
         <p className="text-muted-foreground text-[10px] font-bold uppercase tracking-[0.2em] mb-1">
           Saborosa Refeição
         </p>
         <h1 className="text-4xl font-extrabold text-foreground tracking-tight">Estoque</h1>
       </header>
-
       <section className="px-4 space-y-4">
         {itens.length === 0 && (
           <div className="text-center py-20">
@@ -62,7 +52,6 @@ export default function Home() {
             <p className="text-muted-foreground text-sm mt-1">Toque no + para começar</p>
           </div>
         )}
-
         {itens.map((item) => {
           const critico = item.quantidade_atual <= item.estoque_minimo;
           return (
@@ -87,8 +76,6 @@ export default function Home() {
                     </span>
                   </p>
                 </div>
-                
-                {/* Ações: Editar e Deletar */}
                 <div className="flex gap-1">
                   <Button
                     variant="cupertino-icon"
@@ -106,8 +93,6 @@ export default function Home() {
                   </Button>
                 </div>
               </div>
-
-              {/* Botões de Controle estilo Apple */}
               <div className="flex items-center gap-3">
                 <Button
                   variant="cupertino-secondary"
@@ -128,8 +113,6 @@ export default function Home() {
           );
         })}
       </section>
-
-      {/* Botão de Adicionar (FAB) */}
       <Button
         variant="fab"
         size="fab"
